@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人导航页</title>
+    <style>
+        :root {
+            --bg: #f5f5f7;
+            --card-bg: rgba(255, 255, 255, 0.72);
+            --text: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --accent: #0071e3;
+            --border: rgba(0, 0, 0, 0.06);
+            --shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --radius: 16px;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            -webkit-font-smoothing: antialiased;
+            background-image:
+                radial-gradient(ellipse at 20% 30%, #e8ecf1 0%, transparent 55%),
+                radial-gradient(ellipse at 75% 65%, #e3e7ed 0%, transparent 55%),
+                radial-gradient(ellipse at 50% 50%, #f0f1f5 0%, transparent 70%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 680px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 32px;
+        }
+
+        /* ========== 时钟 & 问候 ========== */
+        .hero {
+            text-align: center;
+        }
+
+        .time {
+            font-size: 56px;
+            font-weight: 300;
+            letter-spacing: -2px;
+            color: var(--text);
+            line-height: 1;
+            margin-bottom: 6px;
+            font-variant-numeric: tabular-nums;
+            font-family: "SF Mono", "JetBrains Mono", "Menlo", "Consolas", monospace;
+        }
+
+        .greeting {
+            font-size: 15px;
+            color: var(--text-secondary);
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        /* ========== 搜索框 ========== */
+        .search-wrapper {
+            width: 100%;
+            position: relative;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 14px 20px 14px 48px;
+            border: none;
+            border-radius: 28px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            font-size: 15px;
+            color: var(--text);
+            box-shadow: var(--shadow);
+            transition: all var(--transition);
+            outline: none;
+            border: 1px solid var(--border);
+        }
+
+        .search-bar:focus {
+            box-shadow: var(--shadow-hover), 0 0 0 3px rgba(0, 113, 227, 0.12);
+            border-color: rgba(0, 113, 227, 0.25);
+        }
+
+        .search-bar::placeholder {
+            color: #b0b0b8;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #b0b0b8;
+            width: 18px;
+            height: 18px;
+        }
+
+        .search-engine-hint {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 11px;
+            color: #c0c0c8;
+            pointer-events: none;
+            letter-spacing: 0.4px;
+            background: rgba(0, 0, 0, 0.03);
+            padding: 3px 8px;
+            border-radius: 10px;
+        }
+
+        /* ========== 导航卡片 ========== */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            width: 100%;
+        }
+
+        .nav-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius);
+            padding: 20px 16px 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all var(--transition);
+            cursor: default;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .card-links {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .card-links a {
+            display: block;
+            text-decoration: none;
+            color: var(--text);
+            font-size: 14px;
+            padding: 7px 10px;
+            border-radius: 8px;
+            transition: all var(--transition);
+            margin: 0 -6px;
+            font-weight: 400;
+            letter-spacing: 0.2px;
+        }
+
+        .card-links a:hover {
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--accent);
+        }
+
+        /* ========== 响应式 ========== */
+        @media (max-width: 560px) {
+            .nav-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .time {
+                font-size: 42px;
+            }
+
+            .container {
+                gap: 24px;
+            }
+
+            .nav-card {
+                padding: 16px 12px 12px;
+            }
+
+            .card-links a {
+                font-size: 13px;
+                padding: 6px 8px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .nav-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .time {
+                font-size: 36px;
+            }
+
+            body {
+                padding: 16px;
+            }
+
+            .search-bar {
+                padding: 12px 16px 12px 40px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 时间 & 问候 -->
+        <div class="hero">
+            <div class="time" id="clock">00:00</div>
+            <div class="greeting" id="greeting">下午好</div>
+        </div>
+
+        <!-- 搜索框 -->
+        <div class="search-wrapper">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+            type="text"
+            class="search-bar"
+            id="searchInput"
+            placeholder="搜索或输入网址…"
+            autocomplete="off"
+            />
+            <span class="search-engine-hint">↵ 百度搜索</span>
+        </div>
+
+        <!-- 导航卡片 -->
+        <div class="nav-grid">
+            <!-- 常用 -->
+            <div class="nav-card">
+                <span class="card-title">📌 常用</span>
+                <div class="card-links">
+                    <a href="https://www.baidu.com" target="_blank">百度</a>
+                    <a href="https://www.google.com" target="_blank">Google</a>
+                    <a href="https://www.bilibili.com" target="_blank">哔哩哔哩</a>
+                    <a href="https://mail.qq.com" target="_blank">QQ邮箱</a>
+                </div>
+            </div>
+
+            <!-- 工具 -->
+            <div class="nav-card">
+                <span class="card-title">🛠 工具</span>
+                <div class="card-links">
+                    <a href="https://github.com" target="_blank">GitHub</a>
+                    <a href="https://translate.google.cn" target="_blank">Google 翻译</a>
+                    <a href="https://www.jyshare.com" target="_blank">菜鸟工具</a>
+                    <a href="https://caniuse.com" target="_blank">Can I Use</a>
+                </div>
+            </div>
+
+            <!-- 学习 -->
+            <div class="nav-card">
+                <span class="card-title">📖 学习</span>
+                <div class="card-links">
+                    <a href="https://developer.mozilla.org/zh-CN" target="_blank">MDN 文档</a>
+                    <a href="https://www.ruanyifeng.com" target="_blank">阮一峰博客</a>
+                    <a href="https://leetcode.cn" target="_blank">LeetCode</a>
+                    <a href="https://www.zhihu.com" target="_blank">知乎</a>
+                </div>
+            </div>
+
+            <!-- 娱乐 -->
+            <div class="nav-card">
+                <span class="card-title">🎬 娱乐</span>
+                <div class="card-links">
+                    <a href="https://www.youtube.com" target="_blank">YouTube</a>
+                    <a href="https://music.163.com" target="_blank">网易云音乐</a>
+                    <a href="https://www.douban.com" target="_blank">豆瓣</a>
+                    <a href="https://www.iqiyi.com" target="_blank">爱奇艺</a>
+                </div>
+            </div>
+
+            <!-- 社交 -->
+            <div class="nav-card">
+                <span class="card-title">💬 社交</span>
+                <div class="card-links">
+                    <a href="https://weixin.qq.com" target="_blank">微信</a>
+                    <a href="https://web.okjike.com" target="_blank">即刻</a>
+                    <a href="https://weibo.com" target="_blank">微博</a>
+                    <a href="https://twitter.com" target="_blank">Twitter</a>
+                </div>
+            </div>
+
+            <!-- 效率 -->
+            <div class="nav-card">
+                <span class="card-title">⚡ 效率</span>
+                <div class="card-links">
+                    <a href="https://www.notion.so" target="_blank">Notion</a>
+                    <a href="https://feedly.com" target="_blank">Feedly</a>
+                    <a href="https://excalidraw.com" target="_blank">Excalidraw</a>
+                    <a href="https://trello.com" target="_blank">Trello</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // —— 实时时钟 ——
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}`;
+
+            const h = now.getHours();
+            let greetingText = '早上好 ☀️';
+            if (h >= 6 && h < 12) greetingText = '早上好 ☀️';
+            else if (h >= 12 && h < 18) greetingText = '下午好 🌤';
+            else if (h >= 18 && h < 22) greetingText = '傍晚好 🌅';
+            else greetingText = '夜深了 🌙';
+            document.getElementById('greeting').textContent = greetingText;
+        }
+        updateClock();
+        setInterval(updateClock, 10000);
+
+        // —— 搜索功能：回车使用百度搜索 ——
+        const searchInput = document.getElementById('searchInput');
+
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const query = searchInput.value.trim();
+                if (!query) return;
+
+                // 判断是否为网址（简单检测）
+                const isURL =
+                    /^(https?:\/\/)?[\w-]+(\.[\w-]+)+(\/\S*)?$/i.test(query) &&
+                    query.includes('.');
+
+                if (isURL) {
+                    // 补全协议后跳转
+                    const url = query.startsWith('http') ? query : 'https://' + query;
+                    window.location.href = url;
+                } else {
+                    // 使用百度搜索
+                    window.location.href =
+                        'https://www.baidu.com/s?wd=' + encodeURIComponent(query);
+                }
+            }
+        });
+
+        // 页面加载时自动聚焦搜索框
+        window.addEventListener('DOMContentLoaded', () => {
+            searchInput.focus();
+        });
+
+        // 点击页面空白处重新聚焦搜索框
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('a') || e.target.closest('input')) return;
+            searchInput.focus();
+        });
+    </script>
+</body>
+</html>
